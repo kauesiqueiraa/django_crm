@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
+    <h2 class="text-2xl font-bold text-center text-blue-800 mb-6">Login - CRM</h2>
+
+    {% if form.errors %}
+        <p class="text-red-500 text-sm text-center mb-4">Seu usuário ou senha estão incorretos. Tente novamente.</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="id_username" class="block text-gray-700 font-bold mb-2">Usuário:</label>
+            <input type="text" name="username" id="id_username" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus_ring-2 focus:ring-blue-500">
+        </div>
+
+        <div class="mb-6">
+            <label for="id_password" class="block text-gray-700 font-bold mb-2">Senha:</label>
+            <input type="password" name="password" id="id_password" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus>ring-2 focus>ring-blue-500">
+        </div>
+
+        <button type="submit" class="w-full bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline">
+            Entrar
+        </button>
+    </form>
+</div>
+{% endblock %}

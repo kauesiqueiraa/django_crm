@@ -1,0 +1,33 @@
+{% load static %}
+{% load tailwind_tags %}
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosso CRM</title>
+    {% tailwind_css %} {# Isso carrega o CSS do Tailwind #}
+</head>
+
+<body class="bg-gray-100">
+    <nav class="bg-blue-800 text-white p-4">
+        <div class="container mx-auto flex justify-between">
+            <a href="#" class="font-bold text-xl">Django CRM</a>
+            <div>
+                {% if user.is_authenticated %}
+                    <span class="mr-4">Olá, {{ user.username }}!</span>
+                    <a href="{% url 'logout' %}" class="hover:text-gray-300">Sair</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="hover:text-gray-300">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="container mx-auto p-4 mt-4">
+        {% block content %}
+        {% endblock %}
+    </main>
+</body>
+</html>
