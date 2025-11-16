@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'tailwind',
     'theme',
+    'dashboard.apps.DashboardConfig',
     'users.apps.UsersConfig',
     'accounts.apps.AccountsConfig',
     'leads.apps.LeadsConfig',

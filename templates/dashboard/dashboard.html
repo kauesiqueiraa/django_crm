@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="bg-white p-6 routed-lg shadow-md">
+        <h1 class="text-3xl font-bold text-gray-800">Seu Dashboard</h1>
+        <p class="mt-2 text-gray-600">
+            Bem-vindo ao seu CRM, {{ user.first_name|default:user.username }}!
+        </p>
+        <p class="mt-4">
+            Use a barra de navegação acima para gerenciar Leads, Contas e Oportunidades.
+        </p>
+    </div>
+{% endblock%}
