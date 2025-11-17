@@ -3,7 +3,7 @@
 {% block content %}
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-3xl font-bold text-gray-800">Lista de Leads</h1>
-        <a href="#" class="gr-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+        <a href="{% url 'leads:create' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
             &#43; Criar novo Lead
         </a>
     </div>
@@ -41,7 +41,7 @@
                         {{ lead.email|default:"-" }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <a href="#" class="text-blue-600 hover:text-blue-900">Ver</a>
+                        <a href="{% url 'leads:detail' pk=lead.pk %}" class="text-blue-600 hover:text-blue-900">Ver</a>
                     </td>
                 </tr>
                 {% empty %}

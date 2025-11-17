@@ -28,8 +28,13 @@
             <div>
                 {% if user.is_authenticated %}
                     <span class="mr-4">Olá, {{ user.username }}!</span>
-                    <a href="{% url 'logout' %}" class="hover:text-gray-300">Sair</a>
-                {% else %}
+                    <form action="{% url 'logout' %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:text-gray-300 bg-transparent border-none p-0 cursor-pointer">
+                            Sair
+                        </button>
+                    </form>
+                    {% else %}
                     <a href="{% url 'login' %}" class="hover:text-gray-300">Login</a>
                 {% endif %}
             </div>

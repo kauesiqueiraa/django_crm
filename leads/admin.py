@@ -3,9 +3,10 @@ from .models import Lead, Opportunity
 
 @admin.register(Lead)
 class LeadAdmin(admin.ModelAdmin):
-    list_display = ('first_name', 'last_name', 'company_name', 'status', 'created_at')
+    list_display = ('first_name', 'last_name', 'company_name', 'status', 'owner', 'created_at')
     search_fields = ('first_name', 'last_name', 'email')
-    list_filter = ('status',)
+    list_filter = ('status', 'owner')
+    raw_id_fields = ('owner',)
 
 @admin.register(Opportunity)
 class OpportunityAdmin(admin.ModelAdmin):

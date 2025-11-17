@@ -4,12 +4,12 @@ from accounts.models import Account # Para relacionar a Oportunidade
 
 class Lead(models.Model):
     """
-    Um prospect inicial. Ainda não qualificado.
+    Um prospect inicial. Agora com um 'dono'.
     """
     first_name = models.CharField(max_length=100, verbose_name="Nome")
     last_name = models.CharField(max_length=100, verbose_name="Sobrenome")
     company_name = models.CharField(max_length=255, blank=True, null=True, verbose_name="Empresa")
-    email = models.EmailField(max_length=255, blank=True, null=True),
+    email = models.EmailField(max_length=255, blank=True, null=True, verbose_name="Email")
     phone = models.CharField(max_length=20, blank=True, null=True, verbose_name="Telefone")
 
     STATUS_CHOICES = (
@@ -19,6 +19,15 @@ class Lead(models.Model):
         ('perdido', 'Perdido'),
     )
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='novo')
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="leads_owned",
+        verbose_name="Dono do Lead"
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
