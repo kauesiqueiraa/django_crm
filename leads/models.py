@@ -17,6 +17,7 @@ class Lead(models.Model):
         ('contatado', 'Contatado'),
         ('qualificado', 'Qualificado'),
         ('perdido', 'Perdido'),
+        ('convertido', 'Convertido'),
     )
     status = models.CharField(max_length=15, choices=STATUS_CHOICES, default='novo')
 

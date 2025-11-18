@@ -51,7 +51,7 @@
             <a href="{% url 'leads:update' pk=lead.pk %}" class="bg-yellow-500 hover:bg-yellow-600 text-white font- bold py-2 px-4 rounded-lg shadow-md transition duration-300">
                 Editar
             </a>
-            <a href="#" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+            <a href="{% url 'leads:convert' pk=lead.pk %}" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
                 Converter Lead
             </a>
         </div>

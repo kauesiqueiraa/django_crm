@@ -1,7 +1,10 @@
-from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import View, ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from .models import Lead
+from django.db import transaction
+from accounts.models import Account, Contact
+from .models import Lead, Opportunity
 
 class LeadListView(LoginRequiredMixin, ListView):
     model = Lead
@@ -71,3 +74,44 @@ class LeadDeleteView(LoginRequiredMixin, DeleteView):
         else:
             return Lead.objects.filter(owner=user)
 
+
+class LeadConvertView(LoginRequiredMixin, View):
+    """ 
+    View manual (não generica) para controllar o processo exato de conversão.
+    """
+    def get(self, request, pk):
+        lead = get_object_or_404(Lead, pk=pk, owner=request.user)
+        return render(request, 'leads/lead_convert.html', {'lead': lead})
+
+    def post(self, request, pk):
+        lead = get_object_or_404(Lead, pk=pk, owner=request.user)
+
+        with transaction.atomic():
+            # 1. Criar a Conta (Empresa)
+            account_name = lead.company_name if lead.company_name else f"Família {lead.last_name}"
+            account = Account.objects.create(
+                name=account_name
+            )
+
+            # 2. Criar o Contato (Pessoa) vinculado à Conta
+            contact = Contact.objects.create(
+                account=account,
+                first_name=lead.first_name,
+                last_name=lead.last_name,
+                email=lead.email,
+                phone=lead.phone
+            )
+
+            # 3. Criar a Oportunidade (Negócio) vinculada à Conta e ao Vendedor
+            opportunity = Opportunity.objects.create(
+                name=f"Negócio com {account_name}",
+                account=account,
+                owner=request.user,
+                stage='prospeccao'
+            )
+
+            # 4. Atualizar o Lead antigo (Não deletamos, apenas marcamos como convertido) 
+            lead.status = 'convertido'
+            lead.save()
+
+        return redirect('leads:list')
