@@ -20,7 +20,7 @@
                 <div class="flex space-x-4">
                     <a href="{% url 'leads:list' %}" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700">Leads</a>
                     <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 opacity-50 cursor-not-allowed">Contas</a>
-                    <a href="#" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700 opacity-50 cursor-not-allowed">Oportunidades</a>
+                    <a href="{% url 'leads:kanban' %}" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-blue-700">Oportunidades</a>
                 </div>
                 {% endif %}
             </div>

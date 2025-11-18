@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, ListView, CreateView, DetailView, UpdateView, DeleteView
+from django.views.generic import View, ListView, CreateView, DetailView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.db import transaction
@@ -115,3 +115,37 @@ class LeadConvertView(LoginRequiredMixin, View):
             lead.save()
 
         return redirect('leads:list')
+
+class OpportunityListView(LoginRequiredMixin, ListView):
+    model = Opportunity
+    template_name = 'leads/opportunity_list.html'
+    context_object_name = 'opportunities'
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'gerente':
+            return Opportunity.objects.all().order_by('-created_at')
+        else:
+            return Opportunity.objects.filter(owner=user).order_by('-created_at')
+
+class OpportunityKanbanView(LoginRequiredMixin, TemplateView):
+    template_name = 'leads/opportunity_kanban.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        if user.role == 'gerente':
+            opps = Opportunity.objects.all()
+        else:
+            opps = Opportunity.objects.filter(owner=user)
+        
+        kanban_data = {}
+
+        stage_list = Opportunity.STAGE_CHOICES
+
+        for stage_code, stage_label in stage_list:
+            kanban_data[stage_label] = opps.filter(stage=stage_code)
+
+        context['kanban_data'] = kanban_data
+        return context
