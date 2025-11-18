@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md mt-10">
+    <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Confirmar Exclusão</h1>
+
+    <p class="text-center text-gray-600 mb-8">
+        Você tem certeza que deseja deletar o lead:
+        <strong class="text-red-600">{{ lead.first_name }} {{ lead.last_name }}</strong>
+    </p>
+
+    <p class="text-center text-sm text-gray-500 mb-8">
+        Esta ação não pode ser desfeita.
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="flex justify-center space-x-4">
+            <a href="{% url 'leads:detail' pk=lead.pk %}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                Cancelar
+            </a>
+
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300">
+                Deletar
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

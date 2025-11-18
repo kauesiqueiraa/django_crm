@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, DetailView
+from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from .models import Lead
@@ -41,4 +41,33 @@ class LeadDetailView(LoginRequiredMixin, DetailView):
         else:
             return Lead.objects.filter(owner=user)
 
+class LeadUpdateView(LoginRequiredMixin, UpdateView):
+    model = Lead
+    template_name = 'leads/lead_form.html'
+    fields = ['first_name', 'last_name', 'company_name', 'email', 'phone', 'status']
+    context_object_name = 'lead'
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'gerente':
+            return Lead.objects.all()
+        else:
+            return Lead.objects.filter(owner=user)
+    
+    def get_success_url(self):
+        # Retorna para a página de detalhes do lead que acabou de ser editado
+        return reverse_lazy('leads:detail', kwargs={'pk': self.object.pk})
+
+class LeadDeleteView(LoginRequiredMixin, DeleteView):
+    model = Lead
+    template_name = 'leads/lead_confirm_delete.html'
+    context_object_name = 'lead'
+    success_url = reverse_lazy('leads:list')
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'gerente':
+            return Lead.objects.all()
+        else:
+            return Lead.objects.filter(owner=user)
 
