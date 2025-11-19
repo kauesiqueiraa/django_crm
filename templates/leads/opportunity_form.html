@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-800 mb-6">
+    {% if object %}
+        Editar Oportunidade
+    {% else %}
+        Nova Oportunidade
+    {% endif %}
+</h1>
+
+<div class="bg-white p-8 rounded-lg shadow-md max-w-2xl mx-auto">
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="grid grid-cols-1 gap-6">
+
+            <div class="mb-2">
+                <label class="block text-gray-700 font-bold mb-2">Nome do Negócio</label>
+                {{ form.name }}
+                {% if form.name.error %}<p class="text-red-500 text-xs">{{ form.name.errors|first }}</p>{% endif %}
+            </div>
+
+            <div class="mb-2">
+                <label class="block text-gray-700 font-bold mb-2">Empresa (Conta)</label>
+                {{ form.account }}
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Estágio</label>
+                    {{ form.stage }}
+                </div>
+                <div>
+                    <label class="block text-gray-700 font-bold mb-2">Valor (R$)</label>
+                    {{ form.value }}
+                </div>
+            </div>
+
+            <div class="mb-2">
+                <label class="block text-gray-700 font-bold mb-2">Previsão de Fechamento</label>
+                {{ form.closing_date }}
+                <p class="text-xs text-gray-500 mt-1">Formato: AAAA-MM-DD</p>
+            </div>
+
+        </div>
+
+        <div class="mt-8 flex justify-end space-x-4">
+            <a href="{% url 'leads:kanban' %}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg shadow-md">
+                Cancelar
+            </a>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadown-md">
+                Salvar
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    document.querySelectorAll('input, select').forEach(el => {
+        el.classList.add('w-full', 'px-3', 'py-2', 'border', 'rounded-lg', 'focus:ring-2', 'focus:ring-blue-500');
+    });
+    const dateInput = document.querySelector('input[name="closing_date"]');
+    if (dateInput) dateInput.type = 'date';
+</script>
+{% endblock%}

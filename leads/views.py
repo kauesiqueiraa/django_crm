@@ -149,3 +149,31 @@ class OpportunityKanbanView(LoginRequiredMixin, TemplateView):
 
         context['kanban_data'] = kanban_data
         return context
+
+class OpportunityCreateView(LoginRequiredMixin, CreateView):
+    model = Opportunity
+    template_name = 'leads/opportunity_form.html'
+    fields = ['name', 'account', 'stage', 'value', 'closing_date']
+    success_url = reverse_lazy('leads:kanban')
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)  
+        # Futuramente criar validação para o vendedor ver somente as empresas que ele criou
+        return form     
+
+class OpportunityUpdateView(LoginRequiredMixin, UpdateView):
+    model = Opportunity
+    template_name = 'leads/opportunity_form.html'
+    fields = ['name', 'account', 'stage', 'value', 'closing_date']
+    success_url = reverse_lazy('leads:kanban')
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role == 'gerente':
+            return Opportunity.objects.all()
+        else:
+            return Opportunity.objects.filter(owner=user)

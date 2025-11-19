@@ -8,6 +8,8 @@ from .views import (
     LeadConvertView,
     OpportunityListView,
     OpportunityKanbanView,
+    OpportunityCreateView,
+    OpportunityUpdateView,
 )
 
 app_name = 'leads'
@@ -20,4 +22,6 @@ urlpatterns = [
     path('<int:pk>/convert/', LeadConvertView.as_view(), name='convert'),
     path('opportunities/', OpportunityListView.as_view(), name='opportunity_list'),
     path('kanban/', OpportunityKanbanView.as_view(), name='kanban'),
+    path('opportunities/create/', OpportunityCreateView.as_view(), name='opportunity_create'),
+    path('opportunities/<int:pk>/update/', OpportunityUpdateView.as_view(), name='opportunity_update'),
 ]

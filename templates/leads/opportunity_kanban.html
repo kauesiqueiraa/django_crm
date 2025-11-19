@@ -1,13 +1,18 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1 class="Text-3xl font-bold text-gray-800 mb-6">Funil de Vendas</h1>
+<div class="flex justify-between items-center mb-6">
+    <h1 class="Text-3xl font-bold text-gray-800">Funil de Vendas</h1>
+    <a href="{% url 'leads:opportunity_create' %}" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md">
+        + Nova Oportunidade
+    </a>
+</div>
 
 <div class="overflow-x-auto pb-4">
     <div class="flex gap-4 min-w-max">
 
         {% for stage_label, opportunities in kanban_data.items %}
-        <div class="w-64 bg-gray-100 rounded-lg p-4 flex-shrink-0">
+        <div class="w-64 bg-gray-100 rounded-lg p-4 shrink-0">
             <h3 class="font-bold text-gray-700 mb-4 uppercase text-sm border-b-2 border-gray-300 pb-2">
                 {{ stage_label }} ({{ opportunities.count }})
             </h3>
@@ -18,7 +23,10 @@
                     {% if 'Ganho' in stage_label %} border-green-500
                     {% elif 'Perdido' in stage_label %}border-red-500
                     {% else %}border-blue-500 {% endif %}">
-                    <h4 class="font-semibold text-gray-800 text-sm">{{ opp.name }}</h4>
+                    <a href="{% url 'leads:opportunity_update' pk=opp.pk %}" class="block">
+                        <h4 class="font-semibold text-gray-800 text-sm hover:text-blue-600">{{ opp.name }}</h4>
+                    </a>
+
                     <p class="text-xs text-gray-500 mt-1">{{ opp.account.name }}</p>
                     <p class="text-xs font-bold text-gray-700 mt-2 text-right">
                         R$ {{ opp.value|default:"0,00" }}
@@ -26,9 +34,12 @@
                     <div class="mt-2 text-xs text-gray-400">
                         {{ opp.owner.username }}
                     </div>
+                    
+                    <a href="{% url 'leads:opportunity_update' pk=opp.pk %}" class="absolute top-2 right-2 text-gray-400 hover:text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                        ✏️
+                    </a>
                 </div>
                 {% empty %}
-                <p class="text-xs text-gray-400 text-center italic">Vazio</p>
                 {% endfor %}
             </div>
         </div>
